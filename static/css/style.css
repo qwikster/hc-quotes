@@ -99,11 +99,11 @@ a:hover, a:focus {
 
 .homep {
     margin-top: 1rem !important;
+    padding: 0px 1rem;
 }
 
 .head {
-    width: 69vw;
-    max-width: 900px;
+    width: 90vw;
 
     display: flex;
     align-items: center;
@@ -115,7 +115,8 @@ a:hover, a:focus {
     background-color: var(--panel);
     color: var(--fg);
 
-    margin-top: 5rem;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
     padding: 1rem 1.2rem;
 }
 
@@ -245,10 +246,13 @@ p {
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 1rem;
     border-bottom: 1px solid #ccc;
     width: 100%;
     box-sizing: border-box;
+}
+
+.vote-cont:last-child {
+    border-bottom: none;
 }
 
 .quote-contain {
@@ -257,10 +261,13 @@ p {
 
 .quote {
     text-align: left;
+    margin-top: 0.3rem;
 }
 
 .author {
     text-align: left;
+    margin-top: 0px;
+    align-self: flex-end;
 }
 
 .vote-buttons {
