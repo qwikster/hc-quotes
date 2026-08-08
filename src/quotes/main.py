@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 import uvicorn
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, status
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -23,8 +23,14 @@ async def lifespan(app: FastAPI):
     yield
 
 def api_routes(app: FastAPI):
-    # app.include_router(bnuuy.router, prefix="/api/bnuuy")
-    pass
+    @app.post("/create", status_code=status.HTTP_201_CREATED)
+    def create(request, author: str, quote: str):
+        return {"message": f"created quote {id}!"}
+
+    @app.post("/vote")
+    def vote(request, up: bool, id: str):
+        votes = 0
+        return {"message": f"upvoted {id}!", "votes": votes}
 
 def app_routes(app: FastAPI):
     @app.get("/quote/{id}")
@@ -44,10 +50,6 @@ def app_routes(app: FastAPI):
     @app.get("/quotes")
     def get_quotes() -> list[dict[str, tuple[str, str]]]:
         return [{"quote": ("uid", "quote")}, {}]
-
-    @app.get("/create")
-    def abc():
-        pass
 
     # HOMEPAGE and css/js
     app.mount("/", StaticFiles(directory="static", html = True), name = "frontend")
