@@ -116,7 +116,7 @@ a:hover, a:focus {
     color: var(--fg);
 
     margin-top: 5rem;
-    padding: 1rem;
+    padding: 1rem 1.2rem;
 }
 
 .login {
@@ -239,3 +239,51 @@ p {
     text-align: center;
     font-size: 1.2rem;
 }
+
+.vote-cont {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.quote-contain {
+    flex: 1;
+}
+
+.quote {
+    text-align: left;
+}
+
+.author {
+    text-align: left;
+}
+
+.vote-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    flex-shrink: 0;
+}
+
+.vote-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+}
+
+.vote-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+}
+
+.upvote { color: var(--hc); }
+.downvote { color: var(--hc-secondary); }

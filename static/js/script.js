@@ -31,9 +31,29 @@ async function add_random_quotes(count)
 
 function add_quote_to_page(id, quote, author, vote_count)
 {
-	const quote_html = `<DIV CLASS="quote-contain"><BLOCKQUOTE><P>${quote}</P></BLOCKQUOTE><P>-- ${author}</P></DIV><DIV CLASS="vote_buttons"><BUTTON onclick='vote(true, "${id}")'>Upvote</BUTTON><SPAN id="vote_count_${id}">${vote_count}</SPAN><BUTTON onclick='vote(false, "${id}")'>Downvote</BUTTON></DIV>`;
+  const quote_html = `
+    <div class="vote-cont">
+        <div class="quote-contain">
+            <p class="quote">${quote}</p>
+            <p class="author"><i>~ ${author}</i></p>
+        </div>
+        <div class="vote-buttons">
+            <button class="vote-btn upvote" aria-label="up" onclick="vote(true, '${id}')">
+                <svg viewBox="0 0 24 24">
+                    <path d="M4 14h6v8h4v-8h6L12 4 4 14z"/>
+                </svg>
+            </button>
+            <span class="vote-count" id="vote_count_${id}">${vote_count}</span>
+            <button class="vote-btn downvote" aria-label="down" onclick="vote(false, '${id}')">
+                <svg viewBox="0 0 24 24">
+                    <path d="M20 10h-6V2h-4v8H4l8 10 8-10z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+	`;
 	var div = document.createElement("div");
 	div.innerHTML = quote_html.trim();
-	document.GetElementById("quotes-all").appendChild(div.firstChild); //copied from somewhere i think
+	document.getElementById("quotes-all").appendChild(div.firstChild); //copied from somewhere i think
 
 }
