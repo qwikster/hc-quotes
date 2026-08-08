@@ -1,1 +1,19 @@
-use js from /js/thing.js
+<!DOCTYPE html>
+<HTML>
+	<HEAD>
+		<TITLE>HC quotes | submit quote</TITLE>
+		<META NAME="viewport" CONTENT="width=device-width, initial-width=1">
+		<LINK REL="stylesheet" HREF="/css/style.css">
+	</HEAD>
+	<BODY>
+		<H1>Submit Quote</H1>
+		<FORM ACTION="/create"  METHOD="POST">
+			<LABEL FOR="author">Enter the original author of the quote here:</LABEL><BR>
+			<INPUT NAME="author" ID="author" PLACEHOLDER="zrl"></INPUT><BR>
+			<LABEL FOR "quote">Enter the quote here:</LABEL><BR>
+			<TEXTAREA NAME="quote" PLACEHOLDER="I want to cheese"></TEXTAREA><BR>
+			<BUTTON TYPE="submit">Submit Quote</BUTTON><BR>
+		</FORM>
+		<P><I>Please remember to follow the code of conduct &lt;3</I></P>
+	</BODY>
+</HTML>
