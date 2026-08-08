@@ -9,6 +9,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.responses import HTMLResponse
 
+from quotes import dbutil
 from quotes.config import config
 
 logger = logging.getLogger("uvicorn.error")
@@ -17,7 +18,7 @@ templates = Jinja2Templates(directory=appdir.parent.parent / "templates")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Base.metadata.create_all(bind=engine) # ADD THIS
+    dbutil.create_all()
     yield
 
 def api_routes(app: FastAPI):
@@ -100,3 +101,8 @@ def entry():
 
 if __name__ == "__main__":
     entry()
+
+
+#
+# TODO TOMORROW:   ADD DATABASE!!!!!
+#
