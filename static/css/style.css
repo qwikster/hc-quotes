@@ -79,6 +79,13 @@ a:hover, a:focus {
     color: var(--primary);
 }
 
+.hidelink {
+    all: unset;
+    flex: 1;
+    display: block;
+    cursor: pointer;
+}
+
 .panel {
     width: 69vw;
     max-width: 900px;
@@ -257,7 +264,6 @@ p {
 
 .quote-contain {
     padding: 0.3rem;
-    flex: 1;
 }
 
 .quote {

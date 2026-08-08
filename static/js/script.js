@@ -32,11 +32,13 @@ async function add_random_quotes(count)
 function add_quote_to_page(id, quote, author, vote_count)
 {
   const quote_html = `
-    <div class="vote-cont">
+  <div class="vote-cont">
+    <a class="hidelink" href="/q/${id}" target="_self">
         <div class="quote-contain">
             <p class="quote">❝${quote}❞</p>
             <p class="author"><i>~ ${author}</i></p>
         </div>
+        </a>
         <div class="vote-buttons">
             <button class="vote-btn upvote" aria-label="up" onclick="vote(true, '${id}')">
                 <svg viewBox="0 0 24 24">
@@ -50,7 +52,7 @@ function add_quote_to_page(id, quote, author, vote_count)
                 </svg>
             </button>
         </div>
-    </div>
+  </div>
 	`;
 	var div = document.createElement("div");
 	div.innerHTML = quote_html.trim();
