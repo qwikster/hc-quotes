@@ -91,6 +91,22 @@ a:hover, a:focus {
     padding: 1rem;
 }
 
+.head {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    border: 3px solid var(--border);
+    border-radius: 1rem;
+    background-color: var(--panel);
+    color: var(--fg);
+
+    margin-top: 5rem;
+    padding: 1rem;
+}
+
+
 .new {
     display: flex;
     flex-direction: column;
