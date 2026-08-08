@@ -59,9 +59,12 @@ body {
 
 h1 {
     margin: 0.4rem 0rem;
+    color: var(--fg);
+}
+
+.hul {
     padding-bottom: 0.4rem;
     border-bottom: 1px dashed var(--border);
-    color: var(--fg);
 }
 
 a {
@@ -77,6 +80,9 @@ a:hover, a:focus {
 }
 
 .panel {
+    width: 69vw;
+    max-width: 900px;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -89,13 +95,20 @@ a:hover, a:focus {
 
     margin-top: 5rem;
     padding: 1rem;
+}
+
+.homep {
+    margin-top: 1rem !important;
 }
 
 .head {
+    width: 69vw;
+    max-width: 900px;
+
     display: flex;
     align-items: center;
-    justify-content: center;
-    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
 
     border: 3px solid var(--border);
     border-radius: 1rem;
@@ -106,6 +119,30 @@ a:hover, a:focus {
     padding: 1rem;
 }
 
+.login {
+    margin-top: 0.3rem;
+    background-color: var(--hc);
+    padding: 0.8rem 2rem;
+    border-radius: 10rem;
+    border: 0.12rem solid var(--border);
+
+    color: var(--fg);
+    font-family: "Phantom Sans";
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: 0.01rem;
+
+    transition: 0.2s ease all;
+}
+
+.login:hover {
+    border-color: var(--secondary);
+}
+
+.login:focus {
+    border-color: var(--secondary);
+    outline: none;
+}
 
 .new {
     display: flex;
