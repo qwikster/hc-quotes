@@ -3,13 +3,12 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 import uvicorn
-from fastapi import FastAPI, Request, Response, status
-from fastapi.responses import FileResponse, RedirectResponse
+from fastapi import FastAPI, Request, status
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from starlette.responses import HTMLResponse
 
 from quotes import dbutil
+from quotes.api.auth import router as authrouter
 from quotes.config import config
 
 logger = logging.getLogger("uvicorn.error")
@@ -22,6 +21,8 @@ async def lifespan(app: FastAPI):
     yield
 
 def api_routes(app: FastAPI):
+    app.include_router(authrouter, prefix="/api/auth")
+
     @app.post("/create", status_code=status.HTTP_201_CREATED)
     def create(request: Request, author: str, quote: str):
         id = ""
@@ -31,24 +32,6 @@ def api_routes(app: FastAPI):
     def vote(request: Request, up: bool, id: str):
         votes = 0
         return {"message": f"upvoted {id}!", "votes": votes}
-
-    @app.get("/login")
-    def login(request: Request):
-        root = config().hca_uri
-        id = config().hca_id
-        return RedirectResponse(url =
-            f"https://auth.hackclub.com/oauth/authorize?client_id={id}&redirect_uri={root}%2Fcallback&response_type=code&scope=openid+profile+slack_id"
-        )
-
-    @app.get("/callback")
-    def callback(response: Response, code: str):
-        pass
-        # response.set_cookie("session", PARAMS)
-
-    @app.get("/logout")
-    def logout(response: Response):
-        response.delete_cookie("session")
-        return {"message": "logged out!"} #WARN: DONT FORGET PARAMS
 
 def app_routes(app: FastAPI):
     @app.get("/quote/{id}")

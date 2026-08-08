@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import JSON, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from quotes.db import Base, timestamp
@@ -19,4 +19,4 @@ class Quote(Base):
     user: Mapped["User"] = relationship(back_populates = "quotes")
     author: Mapped[str]
     quote: Mapped[str]
-    votes: Mapped[int] = mapped_column(default = 0)
+    votes: Mapped[list[tuple[int, bool]]] = mapped_column(JSON, default = list)
