@@ -1,3 +1,4 @@
+import hashlib
 import secrets
 from datetime import UTC, datetime, timedelta
 
@@ -6,7 +7,6 @@ import jwt
 from fastapi import Cookie, Request, Response
 from fastapi.responses import RedirectResponse
 from fastapi.routing import APIRouter
-from jwt.algorithms import hashlib
 
 from quotes.config import config, templates
 from quotes.dbutil import DB, ID, USER

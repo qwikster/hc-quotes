@@ -4,7 +4,7 @@ import string
 from datetime import UTC, datetime
 from typing import Annotated
 
-from fastapi import Cookie, Depends, HTTPException
+from fastapi import Cookie, Depends, HTTPException, Request
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -19,7 +19,7 @@ def create_all():
     from quotes.models import quote, session, user  # noqa: F401
     Base.metadata.create_all(bind=engine)
 
-def getuser(db: DB, token: Annotated[str | None, Cookie()] = None) -> User:
+def getuser(request: Request, db: DB, token: Annotated[str | None, Cookie()] = None) -> User:
     if not token:
         raise HTTPException(401)
     hashed = hashlib.sha256(token.encode()).hexdigest()
@@ -33,10 +33,13 @@ def getuser(db: DB, token: Annotated[str | None, Cookie()] = None) -> User:
         )
     )
     user = db.scalar(stmt)
-    if user:
-        return user
 
-    raise HTTPException(401)
+
+    if not user:
+        raise HTTPException(401)
+    if user.banned:
+        raise HTTPException(501, detail = "User is banned!!")
+    return user
 
 def getuser_safe(db: DB, token: Annotated[str | None, Cookie()] = None) -> User | None:
     if not token:
@@ -65,6 +68,12 @@ def get_hash(db: DB, len: int = 6) -> str:
         )
         if not exists:
             return hash
+
+def get_count(quote: Quote) -> int:
+    score = 0
+    for i in quote.votes:
+        score += 1 if quote.votes[1] else -1
+    return score
 
 USER = Annotated[User, Depends(getuser)]
 ID = Annotated[User | None, Depends(getuser_safe)]

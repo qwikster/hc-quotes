@@ -1,6 +1,7 @@
 import logging
 from contextlib import asynccontextmanager
 
+from sqlalchemy import func, select
 import uvicorn
 from fastapi import FastAPI, Form, HTTPException, Request, status
 from fastapi.responses import RedirectResponse
@@ -9,8 +10,9 @@ from fastapi.staticfiles import StaticFiles
 from quotes import dbutil
 from quotes.api.auth import authfail
 from quotes.api.auth import router as authrouter
+from quotes.bans import dobans
 from quotes.config import appdir, config, templates
-from quotes.dbutil import DB, ID, USER, get_hash
+from quotes.dbutil import DB, ID, USER, get_count, get_hash
 from quotes.models.quote import Quote
 
 logger = logging.getLogger("uvicorn.error")
@@ -37,15 +39,26 @@ def api_routes(app: FastAPI):
         return RedirectResponse(f"/q/{page.id}", status_code=status.HTTP_303_SEE_OTHER)
 
     @app.post("/vote")
-    def vote(request: Request, up: bool, id: str):
-        votes = 0
-        return {"message": f"upvoted {id}!", "votes": votes}
+    def vote(request: Request, db: DB, user: USER, up: bool, id: str):
+        quote = db.get(Quote, id)
+        if not quote or quote.deleted:
+            raise(HTTPException(404, detail = "quote not found!"))
+        if user.id in quote.votes and user.id != "1":
+            raise(HTTPException(409, detail = "you already voted for this!"))
+        quote.votes.append((user.id, up))
+        db.commit()
+        dobans(db, user, quote)
+
+        return({
+            "id": quote.id,
+            "votes": get_count(quote)
+        })
 
 def app_routes(app: FastAPI):
     @app.get("/q/{id}")
     def get_quote(db: DB, user: ID, request: Request, id: str):
         quote = db.get(Quote, id)
-        if not quote:
+        if not quote or quote.deleted:
             return templates.TemplateResponse(
                 request = request,
                 name = "404.html",
@@ -58,18 +71,32 @@ def app_routes(app: FastAPI):
             request = request,
             name = "quote.html",
             context = {
-                "submitter": quote.user.nickname,
+                "author": quote.author,
                 "quote": quote.quote,
-                "votes": len(quote.votes),
+                "submitter": quote.user.nickname,
+                "votes": get_count(quote),
                 "voted": user and user.id in quote.votes,
                 "logged_in": bool(user),
-                "author": quote.author,
             }
         )
 
     @app.get("/quotes")
-    def get_quotes() -> list[dict[str, tuple[str, str]]]:
-        return [{"quote": ("uid", "quote")}, {}]
+    def get_quotes(db: DB, uid: ID, limit: int = 30, offset: int = 0, random: bool = True) -> list[dict]:
+        rand = func.random() if random else Quote.created_at.desc()
+        stmt = select(Quote).where(Quote.deleted == False).order_by(rand).offset(offset).limit(limit)
+        list = db.scalars(stmt).all()
+
+        results = []
+        for q in list:
+            results.append({
+                "author": q.author,
+                "quote": q.quote,
+                "submitter": q.user,
+                "votes": get_count(q),
+                "voted": uid and uid.id in q.votes
+            })
+
+        return results
 
     # HOMEPAGE and css/js
     app.mount("/", StaticFiles(directory=appdir.parent.parent / "static", html = True), name = "frontend")
