@@ -91,6 +91,7 @@ def app_routes(app: FastAPI):
         results = []
         for q in list:
             results.append({
+                "id": q.id,
                 "author": q.author,
                 "quote": q.quote,
                 "submitter": q.user.nickname,
