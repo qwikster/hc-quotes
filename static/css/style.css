@@ -1,0 +1,75 @@
+/* the creator of Phantom Sans said hc'ers can use it, there's a message in slack somewhere uwu */
+@font-face {
+	font-family: "Phantom Sans";
+	src:
+	url("https://assets.hackclub.com/fonts/Phantom_Sans_0.7/Regular.woff") format("woff"),
+	url("https://assets.hackclub.com/fonts/Phantom_Sans_0.7/Regular.woff2") format("woff2");
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Phantom Sans";
+	src:
+	url("https://assets.hackclub.com/fonts/Phantom_Sans_0.7/Italic.woff") format("woff"),
+	url("https://assets.hackclub.com/fonts/Phantom_Sans_0.7/Italic.woff2") format("woff2");
+	font-weight: normal;
+	font-style: italic;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Phantom Sans";
+	src:
+	url("https://assets.hackclub.com/fonts/Phantom_Sans_0.7/Bold.woff") format("woff"),
+	url("https://assets.hackclub.com/fonts/Phantom_Sans_0.7/Bold.woff2") format("woff2");
+	font-weight: bold;
+	font-style: normal;
+	font-display: swap;
+}
+
+
+
+body {
+	--hc-red: #ec3750;
+	--hc-muted: #8492a6;
+}
+
+body {
+	font-family: "Phantom Sans";
+	margin-left: 10%;
+	margin-right: 10%;
+	font-size: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+h1 {
+	text-align: center;
+	color: var(--hc-red);
+}
+
+form {
+	min-width: 40%;
+	max-width: 50rem;
+	border: 0.2rem solid #000000;
+	padding: 2rem;
+	padding-left: 1rem;
+}
+
+input, textarea {
+	font-family: serif;
+	font-size: 1rem;
+	width: 80%;
+}
+
+textarea {
+	height: 7rem;
+}
+
+i {
+	text-align: left;
+}
+
