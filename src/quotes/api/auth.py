@@ -9,7 +9,7 @@ from fastapi.responses import RedirectResponse
 from fastapi.routing import APIRouter
 
 from quotes.config import config, templates
-from quotes.dbutil import DB, ID, USER
+from quotes.dbutil import DB, USER
 from quotes.models.session import Session as SessionModel
 from quotes.models.user import User
 
@@ -130,6 +130,11 @@ def logout(response: Response):
 
 @router.get("/me")
 def profile(request: Request, db: DB, user: USER) -> dict:
+    if user.total_quotes == 0:
+        return {
+            "name": user.nickname,
+            "ratio": 0.0
+        }
     return {
         "name": user.nickname,
         "ratio": (user.nuked_quotes / user.total_quotes) * 100

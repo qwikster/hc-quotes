@@ -38,7 +38,7 @@ def getuser(request: Request, db: DB, token: Annotated[str | None, Cookie()] = N
     if not user:
         raise HTTPException(401)
     if user.banned:
-        raise HTTPException(501, detail = "User is banned!!")
+        raise HTTPException(403, detail = "User is banned!! DM @qwik if you think this is a mistake")
     return user
 
 def getuser_safe(db: DB, token: Annotated[str | None, Cookie()] = None) -> User | None:
@@ -72,7 +72,7 @@ def get_hash(db: DB, len: int = 6) -> str:
 def get_count(quote: Quote) -> int:
     score = 0
     for i in quote.votes:
-        score += 1 if quote.votes[1] else -1
+        score += 1 if i[1] else -1
     return score
 
 USER = Annotated[User, Depends(getuser)]

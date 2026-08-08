@@ -1,11 +1,11 @@
 import logging
 from contextlib import asynccontextmanager
 
-from sqlalchemy import func, select
 import uvicorn
 from fastapi import FastAPI, Form, HTTPException, Request, status
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
+from sqlalchemy import func, select
 
 from quotes import dbutil
 from quotes.api.auth import authfail
@@ -28,6 +28,7 @@ def api_routes(app: FastAPI):
     @app.post("/create", status_code=status.HTTP_201_CREATED)
     def create(db: DB, request: Request, user: USER, author: str = Form(...), quote: str = Form(...)):
         print(user.__dict__)
+        user.total_quotes += 1
         page = Quote(
             id=get_hash(db, len=6),
             author = author,
@@ -43,11 +44,11 @@ def api_routes(app: FastAPI):
         quote = db.get(Quote, id)
         if not quote or quote.deleted:
             raise(HTTPException(404, detail = "quote not found!"))
-        if user.id in quote.votes and user.id != "1":
+        if any(v[0] == user.id for v in quote.votes) and user.id != "1":
             raise(HTTPException(409, detail = "you already voted for this!"))
-        quote.votes.append((user.id, up))
+        quote.votes = quote.votes + [(user.id, up)]
         db.commit()
-        dobans(db, user, quote)
+        dobans(db, quote)
 
         return({
             "id": quote.id,
@@ -91,7 +92,7 @@ def app_routes(app: FastAPI):
             results.append({
                 "author": q.author,
                 "quote": q.quote,
-                "submitter": q.user,
+                "submitter": q.user.nickname,
                 "votes": get_count(q),
                 "voted": uid and uid.id in q.votes
             })
