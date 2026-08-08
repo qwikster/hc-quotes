@@ -64,6 +64,18 @@ h1 {
     color: var(--fg);
 }
 
+a {
+    color: var(--hc-secondary);
+    text-decoration: underline;
+    text-decoration-thickness: 0.1rem;
+    font-weight: 650;
+    transition: 0.2s ease all
+}
+
+a:hover, a:focus {
+    color: var(--primary);
+}
+
 .panel {
     display: flex;
     align-items: center;
@@ -161,6 +173,10 @@ h1 {
     margin-top: 0.8rem;
     text-align: center;
     font-size: 0.8rem;
+}
+
+.error {
+    color: var(--fgd);
 }
 
 p {
