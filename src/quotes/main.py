@@ -3,19 +3,17 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 import uvicorn
-from fastapi import FastAPI, Request, status
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, Request, Response, status
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.responses import HTMLResponse
 
-DEVMODE = True
-HOST = "0.0.0.0"
-PORT = 1984
+from quotes.config import config
 
 logger = logging.getLogger("uvicorn.error")
 appdir = Path(__file__).resolve().parent
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=appdir.parent.parent / "templates")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -24,13 +22,32 @@ async def lifespan(app: FastAPI):
 
 def api_routes(app: FastAPI):
     @app.post("/create", status_code=status.HTTP_201_CREATED)
-    def create(request, author: str, quote: str):
+    def create(request: Request, author: str, quote: str):
+        id = ""
         return {"message": f"created quote {id}!"}
 
     @app.post("/vote")
-    def vote(request, up: bool, id: str):
+    def vote(request: Request, up: bool, id: str):
         votes = 0
         return {"message": f"upvoted {id}!", "votes": votes}
+
+    @app.get("/login")
+    def login(request: Request):
+        root = config().hca_uri
+        id = config().hca_id
+        return RedirectResponse(url =
+            f"https://auth.hackclub.com/oauth/authorize?client_id={id}&redirect_uri={root}%2Fcallback&response_type=code&scope=openid+profile+slack_id"
+        )
+
+    @app.get("/callback")
+    def callback(response: Response, code: str):
+        pass
+        # response.set_cookie("session", PARAMS)
+
+    @app.get("/logout")
+    def logout(response: Response):
+        response.delete_cookie("session")
+        return {"message": "logged out!"} #WARN: DONT FORGET PARAMS
 
 def app_routes(app: FastAPI):
     @app.get("/quote/{id}")
@@ -52,7 +69,7 @@ def app_routes(app: FastAPI):
         return [{"quote": ("uid", "quote")}, {}]
 
     # HOMEPAGE and css/js
-    app.mount("/", StaticFiles(directory="static", html = True), name = "frontend")
+    app.mount("/", StaticFiles(directory=appdir.parent.parent / "static", html = True), name = "frontend")
 
 def create_app() -> FastAPI:
     app = FastAPI(lifespan = lifespan)
@@ -62,11 +79,11 @@ def create_app() -> FastAPI:
 
 
 def entry():
-    if DEVMODE:
+    if config().devmode:
         uvicorn.run(
             "quotes.main:create_app",
-            host = HOST,
-            port = PORT,
+            host = config().host,
+            port = config().port,
             reload = True,
             factory = True,
             log_level = "info"
@@ -74,8 +91,8 @@ def entry():
     else:
         uvicorn.run(
             "quotes.main:create_app",
-            host = HOST,
-            port = PORT,
+            host = config().host,
+            port = config().port,
             reload = False,
             factory = True,
             log_level = "info"
