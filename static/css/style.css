@@ -63,18 +63,25 @@ form {
 	*/
 	background-color: #e0e6ed;
 	border-radius: 12px; /* from theme.hackclub.com lol */
-	display: flex;
-	flex-direction: column;
-	align-items: left;
 	padding: 2rem;
 	padding-left: 1rem;
 	line-height: 1.375;
 }
 
+form * {
+	margin: 0.1rem;
+};
+
+label {
+	display: block;
+	min-width: 100;
+};
+
 input, textarea {
 	font-family: serif;
 	font-size: 1rem;
-	width: 80%;
+	min-width: 32vw;
+	max-width: 40rem;
 	border-radius: 4px;
 	border: 0;
 }
@@ -89,6 +96,11 @@ button {
 	cursor: pointer;
 	font-weight: 700;
 	transition: transform .125s ease-in-out,box-shadow .125s ease-in-out;
+	box-shadow:0 4px 8px rgba(0, 0, 0, 0.125);
+	border-radius: 99999px;
+	border: 0;
+	color: #ffffff;
+	min-height: 3rem;
 }
 
 
