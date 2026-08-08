@@ -73,6 +73,7 @@ def app_routes(app: FastAPI):
             request = request,
             name = "quote.html",
             context = {
+                "id": quote.id,
                 "author": quote.author,
                 "quote": quote.quote,
                 "submitter": quote.user.nickname,

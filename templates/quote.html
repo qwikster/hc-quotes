@@ -15,13 +15,16 @@
 					<P>-- {{ author }}</P>
 				</DIV>
 				<DIV CLASS="vote_buttons">
-					<BUTTON onclick='vote(true, "{{ id }})")'>Upvote</BUTTON>
+					<BUTTON onclick='vote(true, "{{ id }}")'>Upvote</BUTTON>
 					<SPAN id="vote_count">{{ votes }}</SPAN>
-					<BUTTON onclick='vote(false, "{{ id }})")'>Downvote</BUTTON>
+					<BUTTON onclick='vote(false, "{{ id }}")'>Downvote</BUTTON>
 				</DIV>
 			</DIV>
 			<SCRIPT>
-				if (({{ voted }} ) || !({{ logged_in }})) {
+			    const voted = {{ voted | tojson }};
+				const loggedin = {{ logged_in }}
+
+				if (voted || !loggedin) {
 					voteButtons = document.querySelector("div.vote_buttons button");
 					for (let i = 0; i < voteButtons.length; i++) {
 						voteButtons[i].disabled = true;
