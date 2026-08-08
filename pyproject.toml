@@ -10,7 +10,8 @@ dependencies = [
     "jinja2",
     "httpx",
     "pyjwt",
-    "cryptography"
+    "cryptography",
+    "python-multipart"
 ]
 
 [project.scripts]

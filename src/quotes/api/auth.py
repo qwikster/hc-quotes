@@ -9,7 +9,7 @@ from fastapi.routing import APIRouter
 from jwt.algorithms import hashlib
 
 from quotes.config import config, templates
-from quotes.dbutil import DB
+from quotes.dbutil import DB, ID, USER
 from quotes.models.session import Session as SessionModel
 from quotes.models.user import User
 
@@ -129,9 +129,8 @@ def logout(response: Response):
     return response
 
 @router.get("/me")
-def profile(request: Request, db: DB) -> dict: # info on user to add later
-
+def profile(request: Request, db: DB, user: USER) -> dict:
     return {
-        "name": "",
-        "ratio": ""
+        "name": user.nickname,
+        "ratio": (user.nuked_quotes / user.total_quotes) * 100
     }
