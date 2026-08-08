@@ -14,7 +14,18 @@
 					</BLOCKQUOTE>
 					<P>-- {{ author }}</P>
 				</DIV>
-				
+				<DIV CLASS="vote_buttons">
+					<BUTTON onclick='vote("True", "{{ id }})")'>Upvote</BUTTON>
+					<BUTTON onclick='vote("False", "{{ id }})")'>Upvote</BUTTON>
+				</DIV>
 			</DIV>
+			<SCRIPT>
+				if ((voted) || !(logged_in)) {
+					voteButtons = document.querySelector("div.vote_buttons button");
+					for (let i = 0; i < voteButtons.length; i++) {
+						voteButtons[i].disabled = true;
+						};
+				};
+			</SCRIPT>
 		</BODY>
 </HTML>
