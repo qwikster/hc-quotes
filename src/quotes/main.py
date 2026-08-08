@@ -24,7 +24,13 @@ def api_routes(app: FastAPI):
     @app.post("/create", status_code=status.HTTP_201_CREATED)
     def create(request: Request, author: str, quote: str):
         id = ""
-        return {"message": f"created quote {id}!"}
+        return templates.TemplateResponse(
+            request = request,
+            name = "200.html",
+            context = {
+                "id": "beans",
+            }
+        )
 
     @app.post("/vote")
     def vote(request: Request, up: bool, id: str):
