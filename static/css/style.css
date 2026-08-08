@@ -256,17 +256,22 @@ p {
 }
 
 .quote-contain {
+    padding: 0.3rem;
     flex: 1;
 }
 
 .quote {
     text-align: left;
     margin-top: 0.3rem;
+    color: var(--fgd);
+    padding-left: 0.6rem;
+    border-left: 0.3rem solid var(--dim);
 }
 
 .author {
     text-align: left;
-    margin-top: 0px;
+    padding-left: -0.3rem;
+    margin-top: 0.3rem;
     align-self: flex-end;
 }
 

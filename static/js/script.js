@@ -9,7 +9,7 @@ async function vote(is_up, quote_id)
 	const response = await fetch(url, { method: "POST" });
 	const response_obj = await response.json();
 	document.getElementById("vote_count_" + quote_id).innerHTML = response_obj.votes;
-	
+
 	voteButtons = document.querySelector("div.vote_buttons button");
 	for (let i = 0; i < voteButtons.length; i++) {
 		voteButtons[i].disabled = true;
@@ -34,7 +34,7 @@ function add_quote_to_page(id, quote, author, vote_count)
   const quote_html = `
     <div class="vote-cont">
         <div class="quote-contain">
-            <p class="quote">${quote}</p>
+            <p class="quote">❝${quote}❞</p>
             <p class="author"><i>~ ${author}</i></p>
         </div>
         <div class="vote-buttons">
