@@ -2,14 +2,16 @@ import logging
 from contextlib import asynccontextmanager
 
 import uvicorn
-from fastapi import FastAPI, HTTPException, Request, status
+from fastapi import FastAPI, Form, HTTPException, Request, status
+from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 from quotes import dbutil
 from quotes.api.auth import authfail
 from quotes.api.auth import router as authrouter
 from quotes.config import appdir, config, templates
-from quotes.dbutil import USER
+from quotes.dbutil import DB, ID, USER, get_hash
+from quotes.models.quote import Quote
 
 logger = logging.getLogger("uvicorn.error")
 
@@ -22,16 +24,17 @@ def api_routes(app: FastAPI):
     app.include_router(authrouter, prefix="")
 
     @app.post("/create", status_code=status.HTTP_201_CREATED)
-    def create(request: Request, user: USER, author: str, quote: str):
+    def create(db: DB, request: Request, user: USER, author: str = Form(...), quote: str = Form(...)):
         print(user.__dict__)
-        return templates.TemplateResponse(
-            request = request,
-            name = "200.html",
-            context = {
-                "ok": True,
-                "id": "beans",
-            }
+        page = Quote(
+            id=get_hash(db, len=6),
+            author = author,
+            quote = quote.replace("\n", " "),
+            user = user
         )
+        db.add(page)
+        db.commit()
+        return RedirectResponse(f"/q/{page.id}", status_code=status.HTTP_303_SEE_OTHER)
 
     @app.post("/vote")
     def vote(request: Request, up: bool, id: str):
@@ -39,17 +42,28 @@ def api_routes(app: FastAPI):
         return {"message": f"upvoted {id}!", "votes": votes}
 
 def app_routes(app: FastAPI):
-    @app.get("/quote/{id}")
-    def get_quote(request: Request, id: str):
+    @app.get("/q/{id}")
+    def get_quote(db: DB, user: ID, request: Request, id: str):
+        quote = db.get(Quote, id)
+        if not quote:
+            return templates.TemplateResponse(
+                request = request,
+                name = "404.html",
+                context = {
+                    "path": id
+                },
+                status_code=404
+            )
         return templates.TemplateResponse(
             request = request,
             name = "quote.html",
             context = {
-                "submitter_nick": "qwik",
-                "quote": "cheese",
-                "votes": "0",
-                "author_nick": "zach latta",
-                "author_id": "slackidhere"
+                "submitter": quote.user.nickname,
+                "quote": quote.quote,
+                "votes": len(quote.votes),
+                "voted": user and user.id in quote.votes,
+                "logged_in": bool(user),
+                "author": quote.author,
             }
         )
 

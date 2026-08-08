@@ -1,1 +1,8 @@
 <p>{{ quote }}</p>
+
+"submitter": quote.user.nickname,
+"quote": quote.quote,
+"votes": len(quote.votes),
+"voted": user and user.id in quote.votes,
+"logged_in": bool(user),
+"author": quote.author,
