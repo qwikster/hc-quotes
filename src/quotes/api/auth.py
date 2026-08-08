@@ -8,9 +8,8 @@ from fastapi.responses import RedirectResponse
 from fastapi.routing import APIRouter
 from jwt.algorithms import hashlib
 
-from quotes.config import config
+from quotes.config import config, templates
 from quotes.dbutil import DB
-from quotes.main import templates
 from quotes.models.session import Session as SessionModel
 from quotes.models.user import User
 
@@ -18,9 +17,10 @@ router = APIRouter()
 _jwks_client = jwt.PyJWKClient("https://auth.hackclub.com/oauth/discovery/keys")
 
 def authfail(request: Request, error: str):
+    print(f"FAILURE::: {error}")
     return templates.TemplateResponse(
         request = request,
-        name = "quote.html",
+        name = "401.html",
         status_code = 401,
         context = { "message": error }
     )
@@ -58,6 +58,7 @@ def callback(
     )
     if token_resp.status_code != 200:
         return authfail(request, "token exchange failed")
+    print(token_resp.json())
 
     id_token = token_resp.json().get("id_token")
     if id_token is None:
@@ -72,7 +73,8 @@ def callback(
             audience=config().hca_id,
             issuer="https://auth.hackclub.com",
         )
-    except jwt.PyJWTError:
+    except jwt.PyJWTError as e:
+        print(e)
         return authfail(request, "got invalid token from HCA")
 
     hca_ident = claims["sub"]
@@ -113,7 +115,7 @@ def callback(
         key="token",
         value=raw_token,
         httponly=True,
-        secure=True,
+        secure=not config().devmode,
         samesite="lax",
         max_age=int(timedelta(weeks=2).total_seconds()),
     )
@@ -124,3 +126,7 @@ def callback(
 def logout(response: Response):
     response.delete_cookie("session")
     return {"message": "logged out!"} #WARN: DONT FORGET PARAMS
+
+@router.get("/me")
+def profile(request: Request) -> dict: # info on user to add later
+    return {}

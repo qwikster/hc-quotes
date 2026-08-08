@@ -9,7 +9,8 @@ dependencies = [
     "pydantic-settings",
     "jinja2",
     "httpx",
-    "pyjwt"
+    "pyjwt",
+    "cryptography"
 ]
 
 [project.scripts]
