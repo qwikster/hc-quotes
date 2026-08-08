@@ -32,7 +32,7 @@ def login():
     redir.set_cookie(
         "oidc_state", state,
         max_age = 600, httponly = True,
-        secure = True, samesite = "lax",
+        secure = config().devmode, samesite = "lax",
     )
     return redir
 
@@ -119,14 +119,19 @@ def callback(
         samesite="lax",
         max_age=int(timedelta(weeks=2).total_seconds()),
     )
-    response.delete_cookie("oidc_state")
+    response.delete_cookie("oidc_state", httponly = True, secure = config().devmode, samesite = "lax")
     return response
 
 @router.get("/logout")
 def logout(response: Response):
-    response.delete_cookie("session")
-    return {"message": "logged out!"} #WARN: DONT FORGET PARAMS
+    response = RedirectResponse(url = "/")
+    response.delete_cookie("token", httponly=True, secure=not config().devmode, samesite="lax")
+    return response
 
 @router.get("/me")
-def profile(request: Request) -> dict: # info on user to add later
-    return {}
+def profile(request: Request, db: DB) -> dict: # info on user to add later
+
+    return {
+        "name": "",
+        "ratio": ""
+    }

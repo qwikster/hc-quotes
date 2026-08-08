@@ -1,15 +1,15 @@
 import logging
 from contextlib import asynccontextmanager
-from pathlib import Path
 
 import uvicorn
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 
 from quotes import dbutil
+from quotes.api.auth import authfail
 from quotes.api.auth import router as authrouter
 from quotes.config import appdir, config, templates
+from quotes.dbutil import USER
 
 logger = logging.getLogger("uvicorn.error")
 
@@ -22,12 +22,13 @@ def api_routes(app: FastAPI):
     app.include_router(authrouter, prefix="")
 
     @app.post("/create", status_code=status.HTTP_201_CREATED)
-    def create(request: Request, author: str, quote: str):
-        id = ""
+    def create(request: Request, user: USER, author: str, quote: str):
+        print(user.__dict__)
         return templates.TemplateResponse(
             request = request,
             name = "200.html",
             context = {
+                "ok": True,
                 "id": "beans",
             }
         )
@@ -63,8 +64,12 @@ def create_app() -> FastAPI:
     app = FastAPI(lifespan = lifespan)
     api_routes(app)
     app_routes(app)
-    return app
 
+    @app.exception_handler(status.HTTP_401_UNAUTHORIZED)
+    async def unauthed_handle(request: Request, exc: HTTPException):
+        return authfail(request, "You are not logged in!")
+
+    return app
 
 def entry():
     if config().devmode:
