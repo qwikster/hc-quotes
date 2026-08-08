@@ -1,8 +1,20 @@
-<p>{{ quote }}</p>
-
-"submitter": quote.user.nickname,
-"quote": quote.quote,
-"votes": len(quote.votes),
-"voted": user and user.id in quote.votes,
-"logged_in": bool(user),
-"author": quote.author,
+<!DOCTYPE html>
+<HTML>
+		<HEAD>
+			<TITLE>hc quotes | quote by {{ author }}</TITLE>
+			<META NAME="viewport" CONTENT="width=device-width, initial-width=1">
+			<LINK REL="stylesheet" HREF="/css/style.css">
+		</HEAD>
+		<BODY>
+			<DIV ID="home-div">
+				<H1>Quote</H1>
+				<DIV CLASS="quote">
+					<BLOCKQUOTE>
+						<P>{{ quote }}</P>
+					</BLOCKQUOTE>
+					<P>-- {{ author }}</P>
+				</DIV>
+				
+			</DIV>
+		</BODY>
+</HTML>
