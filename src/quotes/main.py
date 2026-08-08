@@ -9,11 +9,9 @@ from fastapi.templating import Jinja2Templates
 
 from quotes import dbutil
 from quotes.api.auth import router as authrouter
-from quotes.config import config
+from quotes.config import appdir, config, templates
 
 logger = logging.getLogger("uvicorn.error")
-appdir = Path(__file__).resolve().parent
-templates = Jinja2Templates(directory=appdir.parent.parent / "templates")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -21,7 +19,7 @@ async def lifespan(app: FastAPI):
     yield
 
 def api_routes(app: FastAPI):
-    app.include_router(authrouter, prefix="/api/auth")
+    app.include_router(authrouter, prefix="")
 
     @app.post("/create", status_code=status.HTTP_201_CREATED)
     def create(request: Request, author: str, quote: str):

@@ -1,9 +1,11 @@
 from pathlib import Path
 
+from fastapi.templating import Jinja2Templates
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 _config = None
-DIR = Path(__file__).resolve().parent
+appdir = Path(__file__).resolve().parent
+templates = Jinja2Templates(directory=appdir.parent.parent / "templates")
 
 class Config(BaseSettings):
     devmode: bool = False
@@ -16,7 +18,7 @@ class Config(BaseSettings):
     port: int = 1984
     db_url: str = "sqlite:///quotes.db"
 
-    model_config = SettingsConfigDict(env_file = DIR / ".env", env_file_encoding="utf-8")
+    model_config = SettingsConfigDict(env_file = appdir.parent.parent / ".env", env_file_encoding="utf-8")
 
 def config() -> Config:
     global _config
