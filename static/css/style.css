@@ -1,4 +1,5 @@
 /* the creator of Phantom Sans said hc'ers can use it, there's a message in slack somewhere uwu */
+/* wifi...
 @font-face {
 	font-family: "Phantom Sans";
 	src:
@@ -27,8 +28,7 @@
 	font-weight: bold;
 	font-style: normal;
 	font-display: swap;
-}
-
+}*/
 
 
 body {
@@ -37,7 +37,7 @@ body {
 }
 
 body {
-	font-family: "Phantom Sans";
+	/*font-family: "Phantom Sans"; ugh wifi */
 	font-weight: 400;
 	margin-left: 10%;
 	margin-right: 10%;
@@ -47,6 +47,19 @@ body {
 	align-items: center;
 	color: #1f2d3d;
 	background-color: #ffffff;
+}
+
+#home-div {
+	position: absolute;
+	align-self: center;
+	justify-self: center;
+	float: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	background-color: #eebac1;
+
 }
 
 h1 {
@@ -64,18 +77,13 @@ form {
 	background-color: #e0e6ed;
 	border-radius: 12px; /* from theme.hackclub.com lol */
 	padding: 2rem;
-	padding-left: 1rem;
 	line-height: 1.375;
 }
-
+/*
 form * {
 	margin: 0.1rem;
 };
-
-label {
-	display: block;
-	min-width: 100;
-};
+*/
 
 input, textarea {
 	font-family: serif;
@@ -108,6 +116,10 @@ button {
 button:focus, button:hover {
 	box-shadow:0 1px 2px rgba(0, 0, 0, 0.0625),0 8px 12px rgba(0, 0, 0, 0.125);
 	transform:scale(1.0625);
+}
+
+button#login-button {
+	width: 10rem;
 }
 
 
