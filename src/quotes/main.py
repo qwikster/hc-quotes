@@ -26,8 +26,9 @@ def api_routes(app: FastAPI):
     app.include_router(authrouter, prefix="")
 
     @app.post("/create", status_code=status.HTTP_201_CREATED)
-    def create(db: DB, request: Request, user: USER, author: str = Form(...), quote: str = Form(...)):
-        print(user.__dict__)
+    def create(db: DB, request: Request, user: USER, author: str = Form(..., max_length=64), quote: str = Form(..., max_length=1024)):
+        if not author.strip() or not quote.strip():
+            raise HTTPException(400, detail = "a field is empty")
         user.total_quotes += 1
         page = Quote(
             id=get_hash(db, len=6),
@@ -76,7 +77,7 @@ def app_routes(app: FastAPI):
                 "quote": quote.quote,
                 "submitter": quote.user.nickname,
                 "votes": get_count(quote),
-                "voted": user and user.id in quote.votes,
+                "voted": any(v[0] == user.id for v in quote.votes) if user else True,
                 "logged_in": bool(user),
             }
         )
@@ -94,7 +95,7 @@ def app_routes(app: FastAPI):
                 "quote": q.quote,
                 "submitter": q.user.nickname,
                 "votes": get_count(q),
-                "voted": uid and uid.id in q.votes
+                "voted": any(v[0] == uid.id for v in q.votes) if uid else True
             })
 
         return results
