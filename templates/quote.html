@@ -4,6 +4,7 @@
 			<TITLE>hc quotes | quote by {{ author }}</TITLE>
 			<META NAME="viewport" CONTENT="width=device-width, initial-width=1">
 			<LINK REL="stylesheet" HREF="/css/style.css">
+			<script src="/js/script.js"></script>
 		</HEAD>
 		<BODY>
 			<DIV ID="home-div">
@@ -22,7 +23,7 @@
 			</DIV>
 			<SCRIPT>
 			    const voted = {{ voted | tojson }};
-				const loggedin = {{ logged_in }}
+				const loggedin = {{ logged_in | tojson }}
 
 				if (voted || !loggedin) {
 					voteButtons = document.querySelector("div.vote_buttons button");
