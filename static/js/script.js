@@ -1,5 +1,5 @@
 const VOTE_URL = "/vote";
-const RAND_URL = "/quotes";
+const RAND_URL = `/quotes?sort="new"&limit=30`;
 
 function esc(str) {
   return String(str).replace(/[&<>"']/g, match => ({
