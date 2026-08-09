@@ -108,6 +108,12 @@ a:hover, a:focus {
     padding: 1rem;
 }
 
+@media (width < 600px) {
+    .panel {
+        width: 92vw;
+    }
+}
+
 .homep {
     margin-top: 1rem !important;
     padding: 0px 1rem;
@@ -280,6 +286,7 @@ p {
     color: var(--fgd);
     padding-left: 0.6rem;
     border-left: 0.3rem solid var(--dim);
+    overflow-wrap: break-word;
 }
 
 .author {
