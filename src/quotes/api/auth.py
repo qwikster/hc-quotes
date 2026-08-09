@@ -58,7 +58,6 @@ def callback(
     )
     if token_resp.status_code != 200:
         return authfail(request, "token exchange failed")
-    print(token_resp.json())
 
     id_token = token_resp.json().get("id_token")
     if id_token is None:
@@ -74,7 +73,6 @@ def callback(
             issuer="https://auth.hackclub.com",
         )
     except jwt.PyJWTError as e:
-        print(e)
         return authfail(request, "got invalid token from HCA")
 
     hca_ident = claims["sub"]
