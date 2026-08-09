@@ -349,16 +349,34 @@ p {
     border-color: var(--secondary);
 }
 
-.sbar {
-
-}
-
-.ssel {
-
-}
-
 .sbut {
     background-color: var(--hc);
     border-radius: 10rem;
     padding-inline: 2rem;
+}
+
+.page-switchy-things {
+    display: flex;
+    flex-direction: row;
+    gap: 0.4rem;
+    margin-top: 1rem;
+    border: 0.12rem solid var(--border);
+    border-radius: 10rem;
+    padding: 0.2rem;
+    align-items: center;
+
+    color: var(--hc-secondary);
+    font-weight: 1000;
+    background-color: var(--panel);
+}
+
+.switchy {
+    background-color: var(--hc);
+    border: 0.12rem outset var(--border);
+    border-radius: 10rem;
+    padding-inline: 1rem;
+    font-weight: 2000;
+    font-size: 1.2rem;
+    color: var(--fg);
+
 }
