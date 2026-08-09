@@ -66,4 +66,18 @@ function add_quote_to_page(id, quote, author, vote_count, is_voted)
 
 }
 
+async function checkLoginChangeButtonOwO()
+{
+	const url = "/me";
+	let link = document.querySelector("div.head a")[0];
+	let button = document.querySelector("div.head a button.login")[0];
+
+	response = await fetch(url);
+	if (response.ok) {
+		link.href = "/new";
+		button.innerHTML = "Submit!";
+	};
+	return "UwU";
+};
+	
 
