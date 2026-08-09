@@ -112,7 +112,7 @@ async function Search(offset)
 
 function page(change) //either 1 or -1
 {
-	let orignum = document.getElementById("page-num").innerHTML;
+	let orignum = parseInt(document.getElementById("page-num").innerHTML);
 	let newnum = orignum + change;
 	
 	document.getElementById("page-num").innerHTML = newnum;
