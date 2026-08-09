@@ -48,12 +48,13 @@ def api_routes(app: FastAPI):
         if any(v[0] == user.id for v in quote.votes) and user.id != "1":
             raise(HTTPException(409, detail = "you already voted for this!"))
         quote.votes = quote.votes + [(user.id, up)]
+        quote.score += 1 if up else -1
         db.commit()
         dobans(db, quote)
 
         return({
             "id": quote.id,
-            "votes": get_count(quote)
+            "votes": quote.score
         })
 
 def app_routes(app: FastAPI):
@@ -77,7 +78,7 @@ def app_routes(app: FastAPI):
                 "author": quote.author,
                 "quote": quote.quote,
                 "submitter": quote.user.nickname.capitalize(),
-                "votes": get_count(quote),
+                "votes": quote.score,
                 "voted": any(v[0] == user.id for v in quote.votes) if user else True,
                 "logged_in": bool(user),
             }
@@ -96,7 +97,7 @@ def app_routes(app: FastAPI):
                 "author": q.author,
                 "quote": q.quote,
                 "submitter": q.user.nickname,
-                "votes": get_count(q),
+                "votes": q.score,
                 "voted": any(v[0] == uid.id for v in q.votes) if uid else True
             })
 

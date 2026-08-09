@@ -20,3 +20,4 @@ class Quote(Base):
     author: Mapped[str]
     quote: Mapped[str]
     votes: Mapped[list[tuple[int, bool]]] = mapped_column(JSON, default = list)
+    score: Mapped[int] = mapped_column(default=0, index=True)
