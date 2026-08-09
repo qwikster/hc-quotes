@@ -14,9 +14,6 @@ async function vote(is_up, quote_id)
 	for (let i = 0; i < voteButtons.length; i++) {
 		voteButtons[i].disabled = true;
 	};
-	
-
-
 	return 1;
 };
 
@@ -65,19 +62,3 @@ function add_quote_to_page(id, quote, author, vote_count, is_voted)
 	document.getElementById("quotes-all").appendChild(div.firstChild); //copied from somewhere i think
 
 }
-
-async function checkLoginChangeButtonOwO()
-{
-	const url = "/me";
-	let link = document.querySelector("div.head a")[0];
-	let button = document.querySelector("div.head a button.login")[0];
-
-	response = await fetch(url);
-	if (response.ok) {
-		link.href = "/new";
-		button.innerHTML = "Submit!";
-	};
-	return "UwU";
-};
-	
-
