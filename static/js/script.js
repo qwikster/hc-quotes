@@ -90,3 +90,19 @@ async function replaceLoginButtonIfNeeded()
 	};
 	return 1;
 };
+
+async function Search(offset)
+{
+	//get values
+	let select_value = document.getElementById("search-mode-select").value;
+	let search_value = document.getElementById("search-bar").value;
+	//send request
+	
+	const response = await fetch(`/quotes?query=${search_value}&sort=${select_value}`);
+	const auth = await fetch("/me");
+	const response_array = await response.json();
+	for (i = 0; i < response_array.length; i++) {
+		let q = response_array[i];
+		add_quote_to_page(q.id, esc(q.quote), esc(q.author), q.votes, q.voted, auth);
+	};
+};
