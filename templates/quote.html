@@ -19,13 +19,13 @@
                 </p>
             </div>
             <div class="vote-buttons" style="margin-left: 2rem;">
-                <button class="vote-btn upvote" aria-label="up" onclick="vote(true, '{{ id }}')">
+		    <button class="vote-btn upvote q{{ id }}" aria-label="up" onclick="vote(true, '{{ id }}')">
                     <svg viewBox="0 0 24 24">
                         <path d="M4 14h6v8h4v-8h6L12 4 4 14z"/>
                     </svg>
                 </button>
                 <span class="vote-count" id="vote_count_{{ id }}">{{ votes }}</span>
-                <button class="vote-btn downvote" aria-label="down" onclick="vote(false, '{{ id }}')">
+		<button class="vote-btn downvote q{{ id }}" aria-label="down" onclick="vote(false, '{{ id }}')">
                     <svg viewBox="0 0 24 24">
                         <path d="M20 10h-6V2h-4v8H4l8 10 8-10z"/>
                     </svg>
