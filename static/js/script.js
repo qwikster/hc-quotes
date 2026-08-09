@@ -1,6 +1,16 @@
 const VOTE_URL = "/vote";
 const RAND_URL = "/quotes";
 
+function esc(str) {
+  return String(str).replace(/[&<>"']/g, match => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  })[match]);
+}
+
 async function vote(is_up, quote_id)
 {
 	//make URL
@@ -23,7 +33,7 @@ async function add_random_quotes(count)
 	const response_array = await response.json();
 	for (i = 0; i < response_array.length; i++) {
 		let q = response_array[i];
-		add_quote_to_page(q.id, q.quote, q.author, q.votes, q.voted);
+		add_quote_to_page(q.id, esc(q.quote), esc(q.author), q.votes, q.voted);
 	};
 };
 
