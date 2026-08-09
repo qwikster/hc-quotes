@@ -39,7 +39,8 @@
             const loggedin = {{ logged_in | tojson }}
 
             if (voted || !loggedin) {
-		    voteButtons = document.getElementsByClassName("q" + {{ id }});
+              const id = {{ id | tojson }}
+		    voteButtons = document.getElementsByClassName("q" + id);
             	for (let i = 0; i < voteButtons.length; i++) {
             		voteButtons[i].disabled = true;
             		};
