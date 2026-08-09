@@ -29,19 +29,19 @@ async function vote(is_up, quote_id)
 
 async function add_random_quotes(count)
 {
-	const response = await fetch(RAND_URL);
+  const response = await fetch(RAND_URL);
+  const auth = await fetch("/me");
 	const response_array = await response.json();
 	for (i = 0; i < response_array.length; i++) {
 		let q = response_array[i];
-		add_quote_to_page(q.id, esc(q.quote), esc(q.author), q.votes, q.voted);
+		add_quote_to_page(q.id, esc(q.quote), esc(q.author), q.votes, q.voted, auth);
 	};
 };
 
-async function add_quote_to_page(id, quote, author, vote_count, is_voted)
+async function add_quote_to_page(id, quote, author, vote_count, is_voted, auth)
 {
 	let vote_class = "";
-	const response = await fetch("/me");
-	if (!response.ok) {
+	if (!auth.ok) {
 		vote_class = "disabled";
 	};
 	if (is_voted) {
