@@ -30,6 +30,9 @@
 	font-display: swap;
 }
 
+* {
+    box-sizing: border-box;
+}
 
 :root {
     --bg: #121714;
@@ -314,4 +317,48 @@ p {
 .vote-btn:disabled {
   color: var(--dim);
   cursor: not-allowed;
+}
+
+.search-part {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+.search {
+    height: 2rem;
+    border-radius: 6rem;
+    border: 0.12rem solid var(--border);
+    background-color: var(--dim);
+    padding: 0.2rem 0.8rem;
+    font-family: "Phantom Sans";
+    font-weight: 600;
+    color: var(--fg);
+    transition: 0.2s ease all;
+}
+
+.search:hover {
+    outline: none;
+    border-color: var(--secondary);
+}
+
+.search:focus {
+    outline: none;
+    border-color: var(--secondary);
+}
+
+.sbar {
+
+}
+
+.ssel {
+
+}
+
+.sbut {
+    background-color: var(--hc);
+    border-radius: 10rem;
+    padding-inline: 2rem;
 }
