@@ -100,8 +100,8 @@ async function Search(offset)
 	//clear div
 	document.getElementById("quotes-all").innerHTML = "";
 	//send request
-	
-	const response = await fetch(`/quotes?query=${search_value}&sort=${select_value}`);
+
+	const response = await fetch(`/quotes?query=${search_value}&sort=${select_value}&offset=${offset}&limit=50`);
 	const auth = await fetch("/me");
 	const response_array = await response.json();
 	for (i = 0; i < response_array.length; i++) {
@@ -114,8 +114,8 @@ function page(change) //either 1 or -1
 {
 	let orignum = parseInt(document.getElementById("page-num").innerHTML);
 	let newnum = orignum + change;
-	
+
 	document.getElementById("page-num").innerHTML = newnum;
 
-	Search(newnum*30);
+	Search(newnum*50);
 };
