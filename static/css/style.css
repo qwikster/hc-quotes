@@ -310,3 +310,8 @@ p {
 
 .upvote { color: var(--hc); }
 .downvote { color: var(--hc-secondary); }
+
+.vote-btn:disabled {
+  color: var(--dim);
+  cursor: not-allowed;
+}
