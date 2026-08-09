@@ -76,7 +76,7 @@ def app_routes(app: FastAPI):
                 "id": quote.id,
                 "author": quote.author,
                 "quote": quote.quote,
-                "submitter": quote.user.nickname,
+                "submitter": quote.user.nickname.capitalize(),
                 "votes": get_count(quote),
                 "voted": any(v[0] == user.id for v in quote.votes) if user else True,
                 "logged_in": bool(user),

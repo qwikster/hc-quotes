@@ -87,6 +87,7 @@ a:hover, a:focus {
 }
 
 .panel {
+    min-width: 30vw;
     width: 69vw;
     max-width: 900px;
 
@@ -264,6 +265,10 @@ p {
 
 .quote-contain {
     padding: 0.3rem;
+}
+
+.bigassquote {
+    font-size: 2rem;
 }
 
 .quote {

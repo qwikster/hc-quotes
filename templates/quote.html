@@ -1,36 +1,48 @@
-<!DOCTYPE html>
-<HTML>
-		<HEAD>
-			<TITLE>hc quotes | quote by {{ author }}</TITLE>
-			<META NAME="viewport" CONTENT="width=device-width, initial-width=1">
-			<LINK REL="stylesheet" HREF="/css/style.css">
-			<script src="/js/script.js"></script>
-		</HEAD>
-		<BODY>
-			<DIV ID="home-div">
-				<H1>Quote</H1>
-				<DIV CLASS="quote">
-					<BLOCKQUOTE>
-						<P>{{ quote }}</P>
-					</BLOCKQUOTE>
-					<P>-- {{ author }}</P>
-				</DIV>
-				<DIV CLASS="vote_buttons">
-					<BUTTON onclick='vote(true, "{{ id }}")'>Upvote</BUTTON>
-					<SPAN id="vote_count">{{ votes }}</SPAN>
-					<BUTTON onclick='vote(false, "{{ id }}")'>Downvote</BUTTON>
-				</DIV>
-			</DIV>
-			<SCRIPT>
-			    const voted = {{ voted | tojson }};
-				const loggedin = {{ logged_in | tojson }}
+<!doctype html>
+<html>
+    <head>
+        <title>hc quotes | quote by {{ author }}</title>
+        <meta name="viewport" content="width=device-width, initial-width=1" />
+        <link rel="stylesheet" href="/css/style.css" />
+        <script src="/js/script.js"></script>
+    </head>
+    <body>
+        <div class="panel" style="width: unset; flex-direction: row; justify-content: space-between;">
+            <div class="quote-cont">
+                <p class="quote" style="font-size: 2rem; align-self: flex-start;">
+                    <span class="bigassquote">❝</span>
+                    <br> {{ quote }} <br>
+                    <span class="bigassquote">❞</span>
+                </p>
+                <p class="author" style="font-size: 1.5rem; align-self: center;">
+                    ~ {{ author }} (submitted by {{ submitter }}!)
+                </p>
+            </div>
+            <div class="vote-buttons" style="margin-left: 2rem;">
+                <button class="vote-btn upvote" aria-label="up" onclick="vote(true, '{{ id }}')">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 14h6v8h4v-8h6L12 4 4 14z"/>
+                    </svg>
+                </button>
+                <span class="vote-count" id="vote_count_{{ id }}">{{ votes }}</span>
+                <button class="vote-btn downvote" aria-label="down" onclick="vote(false, '{{ id }}')">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 10h-6V2h-4v8H4l8 10 8-10z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
 
-				if (voted || !loggedin) {
-					voteButtons = document.querySelector("div.vote_buttons button");
-					for (let i = 0; i < voteButtons.length; i++) {
-						voteButtons[i].disabled = true;
-						};
-				};
-			</SCRIPT>
-		</BODY>
-</HTML>
+        <script>
+               const voted = {{ voted | tojson }};
+            const loggedin = {{ logged_in | tojson }}
+
+            if (voted || !loggedin) {
+            	voteButtons = document.querySelector("div.vote_buttons button");
+            	for (let i = 0; i < voteButtons.length; i++) {
+            		voteButtons[i].disabled = true;
+            		};
+            };
+        </script>
+    </body>
+</html>
