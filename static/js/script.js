@@ -29,11 +29,6 @@ async function add_random_quotes(count)
 
 function add_quote_to_page(id, quote, author, vote_count, is_voted)
 {
-	if (is_voted) {
-		let disabled = "disabled";
-	} else {
-		let disabled = "";
-	};
   const quote_html = `
   <div class="vote-cont">
     <a class="hidelink" href="/q/${id}" target="_self">
@@ -43,13 +38,13 @@ function add_quote_to_page(id, quote, author, vote_count, is_voted)
         </div>
         </a>
         <div class="vote-buttons">
-            <button ${disabled} class="vote-btn upvote q${id}" aria-label="up" onclick="vote(true, '${id}')">
+            <button class="vote-btn upvote q${id}" aria-label="up" onclick="vote(true, '${id}')">
                 <svg viewBox="0 0 24 24">
                     <path d="M4 14h6v8h4v-8h6L12 4 4 14z"/>
                 </svg>
             </button>
             <span class="vote-count" id="vote_count_${id}">${vote_count}</span>
-            <button ${disabled} class="vote-btn downvote q${id}" aria-label="down" onclick="vote(false, '${id}')">
+            <button class="vote-btn downvote q${id}" aria-label="down" onclick="vote(false, '${id}')">
                 <svg viewBox="0 0 24 24">
                     <path d="M20 10h-6V2h-4v8H4l8 10 8-10z"/>
                 </svg>
