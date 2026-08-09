@@ -109,3 +109,13 @@ async function Search(offset)
 		add_quote_to_page(q.id, esc(q.quote), esc(q.author), q.votes, q.voted, auth);
 	};
 };
+
+function page(change) //either 1 or -1
+{
+	let orignum = document.getElementById("page-num").innerHTML;
+	let newnum = orignum + change;
+	
+	document.getElementById("page-num").innerHTML = newnum;
+
+	Search(newnum*30);
+};
