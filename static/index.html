@@ -13,16 +13,16 @@
             <a id="login-button-link" href="/new"><button class="login">New Quote!!</button></a>
         </div>
 	<DIV CLASS="search-part">
-		<SELECT ID="search-mode-select">
-			<OPTION VALUE="top" selected>Top</OPTION>
-			<OPTION VALUE="bottom">Bottom</OPTION>
-			<OPTION VALUE="new">New</OPTION>
-			<OPTION VALUE="old">Old</OPTION>
-			<OPTION VALUE="random">Random</OPTION>
-			<OPTION VALUE="alphabet">Alphabet</OPTION>
+		<INPUT class="search sbar" ID="search-bar" PLACEHOLDER="search ->">
+		<SELECT class="search ssel" ID="search-mode-select">
+			<OPTION VALUE="top" selected>votes: top</OPTION>
+			<OPTION VALUE="bottom">votes: low</OPTION>
+			<OPTION VALUE="new">time: new</OPTION>
+			<OPTION VALUE="old">time: old</OPTION>
+			<OPTION VALUE="random">random</OPTION>
+			<OPTION VALUE="alphabet">A -> Z</OPTION>
 		</SELECT>
-		<INPUT ID="search-bar" PLACEHOLDER="i want to cheese">
-		<BUTTON ID="search-button" ONCLICK="Search(0)">Search!</BUTTON>
+		<BUTTON class="search sbut" ID="search-button" ONCLICK="Search(0)">Search!</BUTTON>
 	</DIV>
 	<div class="panel homep" id = "quotes-all">
             <!-- elements added here with js -->
