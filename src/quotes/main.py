@@ -2,10 +2,10 @@ import logging
 from contextlib import asynccontextmanager
 
 import uvicorn
-from fastapi import FastAPI, Form, HTTPException, Request, status
+from fastapi import FastAPI, Form, HTTPException, Query, Request, status
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
-from sqlalchemy import func, select
+from sqlalchemy import desc, func, select
 
 from quotes import dbutil
 from quotes.api.auth import authfail
@@ -85,9 +85,22 @@ def app_routes(app: FastAPI):
         )
 
     @app.get("/quotes")
-    def get_quotes(db: DB, uid: ID, limit: int = 30, offset: int = 0, random: bool = True) -> list[dict]:
-        rand = func.random() if random else Quote.created_at.desc()
-        stmt = select(Quote).where(Quote.deleted == False).order_by(rand).offset(offset).limit(limit)
+    def get_quotes(db: DB, uid: ID, limit: int = Query(30, le=400), offset: int = 0, query: str = "", sort: str = "top") -> list[dict]:
+        SORT = {
+            "top":    Quote.score.desc(),
+            "bottom": Quote.score.asc(),
+            "new":    Quote.created_at.desc(),
+            "old":    Quote.created_at.asc(),
+            "random": func.random(),
+            "alphabet": desc(Quote.quote)
+        }
+        query.replace("%", r"\%").replace("_", r"\_")
+        stmt = select(Quote).where(Quote.deleted == False)
+        if query:
+            stmt = stmt.where(
+                Quote.quote.ilike(f"%{query}%") | Quote.author.ilike(f"%{query}%")
+            )
+        stmt = stmt.order_by(SORT.get(sort, SORT["top"])).offset(offset).limit(limit)
         list = db.scalars(stmt).all()
 
         results = []
