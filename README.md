@@ -61,43 +61,87 @@ by default, you'll be able to access this at http://127.0.0.1:1984 !
 ## AI
   generative AI or large language models were NOT used to generate code in this project.
 
-  consequently, ai was only and will only be used for research and debugging!!.
-
-< this is where the useful readme ends ! >
+  consequently, ai was only and will only be used for research and debugging!!
 
 ## endpoint documentation
+> [!NOTE]
+> this list does not include the template files, just callables!
 
-> [!WARNING]
-> this stuff is ancient, mostly only here for posterities' sake: PLEASE read the code :pf:
+> [!IMPORTANT]
+> **POST** requests require an authenticated cookie with a session from Hack Club Auth. there may later come endpoints to callback in ways more friendly for automations! 
 
-# /root: GET /quotes:
+## Authentication
 
-- random quotes (list)
-  - static HTML file that renders like 20 random quotes, served as a list of objects
+### GET `/login`
+- *params*:
+  - none!
+- *returns*:
+  - cookie: oidc_state
+  - 302: Hack Club Auth link
 
-# GET /quote/{id}: 1 html file:
+### GET `/callback`
+- *params*:
+  - cookie: oidc_state
+  - code: str from HCA
+- *returns*:
+  - cookie: **token**
+  - 303: /
 
-- JINJA2 TEMPLATES
-- <p>{{ title }}</p>
-- link to profile: https://hackclub.enterprise.slack.com/team/SLACK_ID
-  - (use `nickname` from oidc)
+### GET `/logout`:
+- *params*:
+  - cookie: **token**
+- *response*:
+  - removes cookie
+  - 303: /
 
-# POST /create: HTML form
+### GET `/me`:
+- *params*:
+  - cookie: **token**
+    - (simply returns 401 without this!)
+- *response*:
+  - json:
+    - name: "user.nickname",
+    - ratio: float *(deleted / total quotes)*
 
-- session linked to oauth (auto) (cookie)
-- quote text, slack id of sender or anon
+## Content
 
-# POST /vote?up=true: buttons
+### GET `/quotes`:
+- *params*: 
+  - limit: int = 30
+  - offset: int = 0
+  - query: str
+  - sort: str (top | bottom | new | old | random | alphabet)
+- *returns*: 
+```
+  [
+  {
+    "id": str(6),
+    "author": str,
+    "quote": str,
+    "submitter": str,
+    "votes": int,
+    "voted": bool (returns True if you include token and have voted or are unauthenticated)
+  },
+  { ... },
+  ]
+```
+### /q/{id}
+exists, but is only really used for browsers right now as it returns a templated file :( sorry
 
-- up: upvote, down: downvote
-- if hit -2 downvotes it is deleted
-- account banned if >50% of quotes are deleted (after 3 exist)
+## Creation
 
-# OPTIONAL LATER: GET /user/{id} (or /user/my)
+### POST `/create`:
+- *params*:
+  - author: str(64)
+  - quote: str(1024)
+- *returns*:
+  - 303: /q/{id}
 
-- includes session token
-- returns profile info and all quotes from user or submitted by user
-
-# OPTIONAL LATER: GET /search?q=etc
-
-- probably dont do this sob
+### POST `/vote`:
+note: votes *intentionally* cannot be retracted
+- *params*:
+  - id: str(6),
+  - up: bool
+- *returns*:
+  - id: str(6)
+  - votes: int
