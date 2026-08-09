@@ -96,6 +96,9 @@ async function Search(offset)
 	//get values
 	let select_value = document.getElementById("search-mode-select").value;
 	let search_value = document.getElementById("search-bar").value;
+
+	//clear div
+	document.getElementById("quotes-all").innerHTML = "";
 	//send request
 	
 	const response = await fetch(`/quotes?query=${search_value}&sort=${select_value}`);
