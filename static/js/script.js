@@ -27,8 +27,17 @@ async function add_random_quotes(count)
 	};
 };
 
-function add_quote_to_page(id, quote, author, vote_count, is_voted)
+async function add_quote_to_page(id, quote, author, vote_count, is_voted)
 {
+	let vote_class = "";
+	const response = await fetch("/me");
+	if (!response.ok) {
+		vote_class = "disabled";
+	};
+	if (is_voted) {
+		vote_class = "disabled";
+	};
+
   const quote_html = `
   <div class="vote-cont">
     <a class="hidelink" href="/q/${id}" target="_self">
@@ -38,13 +47,13 @@ function add_quote_to_page(id, quote, author, vote_count, is_voted)
         </div>
         </a>
         <div class="vote-buttons">
-            <button class="vote-btn upvote q${id}" aria-label="up" onclick="vote(true, '${id}')">
+            <button ${vote_class} class="vote-btn upvote q${id}" aria-label="up" onclick="vote(true, '${id}')">
                 <svg viewBox="0 0 24 24">
                     <path d="M4 14h6v8h4v-8h6L12 4 4 14z"/>
                 </svg>
             </button>
             <span class="vote-count" id="vote_count_${id}">${vote_count}</span>
-            <button class="vote-btn downvote q${id}" aria-label="down" onclick="vote(false, '${id}')">
+            <button ${vote_class} class="vote-btn downvote q${id}" aria-label="down" onclick="vote(false, '${id}')">
                 <svg viewBox="0 0 24 24">
                     <path d="M20 10h-6V2h-4v8H4l8 10 8-10z"/>
                 </svg>
@@ -57,3 +66,17 @@ function add_quote_to_page(id, quote, author, vote_count, is_voted)
 	document.getElementById("quotes-all").appendChild(div.firstChild); //copied from somewhere i think
 
 }
+
+async function replaceLoginButtonIfNeeded()
+{
+	const response = await fetch("/me");
+	if (!response.ok) {
+		//get button
+		let button = document.querySelector("button.login");
+		let button_link = document.getElementById("login-button-link");
+		//change to LOGIN
+		button.innerHTML = "Login w/HC";
+		button_link.href = "/login";
+	};
+	return 1;
+};
